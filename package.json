@@ -7,9 +7,14 @@
 		"cf-typegen": "wrangler types",
 		"deploy": "pnpm run build && wrangler deploy",
 		"dev": "react-router dev",
+		"dev:remote": "CLOUDFLARE_D1_REMOTE=true react-router dev",
 		"postinstall": "npm run cf-typegen",
 		"preview": "pnpm run build && vite preview",
-		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
+		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b",
+		"db:generate-single": "tsx scripts/generate-sql.ts single \"$@\"",
+		"db:generate-all": "tsx scripts/generate-sql.ts all \"$@\"",
+		"db:populate-single": "./scripts/populate-single.sh",
+		"db:populate-all": "pnpm db:generate-all && pnpm wrangler d1 execute foresty-db --local --file=scripts/populate-all.sql"
 	},
 	"dependencies": {
 		"isbot": "^5.1.31",
@@ -25,6 +30,7 @@
 		"@types/react": "^19.1.13",
 		"@types/react-dom": "^19.1.9",
 		"tailwindcss": "^4.1.13",
+		"tsx": "^4.20.6",
 		"typescript": "^5.9.2",
 		"vite": "^7.1.7",
 		"vite-tsconfig-paths": "^5.1.4",
