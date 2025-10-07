@@ -192,7 +192,7 @@ export default function Species({ loaderData }: Route.ComponentProps) {
           <Breadcrumbs
             items={[
               { label: "Home", href: "/" },
-              { label: species.scientific_name },
+              { label: String(species.scientific_name || "Species") },
             ]}
           />
 

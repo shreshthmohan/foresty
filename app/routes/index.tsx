@@ -1,5 +1,5 @@
 import { useLoaderData, Link, useSearchParams } from "react-router";
-import type { Route } from "./+types/_index";
+import type { Route } from "./+types/index";
 
 interface SpeciesListItem {
   id: number;

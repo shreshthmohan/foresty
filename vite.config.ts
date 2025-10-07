@@ -9,7 +9,6 @@ export default defineConfig({
     cloudflare({
       viteEnvironment: { name: "ssr" },
       persistState: true,
-      d1Databases: ["DB"],
     }),
     tailwindcss(),
     reactRouter(),
