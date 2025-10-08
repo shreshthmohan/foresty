@@ -47,14 +47,14 @@ echo "Step 3/3: Importing to database..."
 
 if [ "$DB_TARGET" = "--both" ]; then
   echo "  → Importing to local database..."
-  pnpm wrangler d1 execute foresty-db --local --file=scripts/populate-single.sql
+  pnpm wrangler d1 execute foresty-db --local --file=scripts/populate-single.sql -y
 
   echo ""
   echo "  → Importing to remote database..."
-  pnpm wrangler d1 execute foresty-db --remote --file=scripts/populate-single.sql
+  pnpm wrangler d1 execute foresty-db --remote --file=scripts/populate-single.sql -y
 else
   echo "  → Importing to $DB_TARGET database..."
-  pnpm wrangler d1 execute foresty-db $DB_TARGET --file=scripts/populate-single.sql
+  pnpm wrangler d1 execute foresty-db $DB_TARGET --file=scripts/populate-single.sql -y
 fi
 
 echo ""
