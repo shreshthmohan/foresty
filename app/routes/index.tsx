@@ -1,4 +1,5 @@
-import { useLoaderData, Link, useSearchParams } from "react-router";
+import { useLoaderData, Link, useSearchParams, Form } from "react-router";
+import { useState, useEffect } from "react";
 import type { Route } from "./+types/index";
 
 interface SpeciesListItem {
@@ -118,6 +119,31 @@ export default function SpeciesList({ loaderData }: Route.ComponentProps) {
 
   const searchQuery = searchParams.get("search") || "";
 
+  // Local state for immediate input updates (fast typing)
+  const [inputValue, setInputValue] = useState(searchQuery);
+
+  // Sync input with URL when search params change (e.g., browser back/forward)
+  useEffect(() => {
+    setInputValue(searchQuery);
+  }, [searchQuery]);
+
+  // Debounce URL updates - wait 300ms after user stops typing
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (inputValue !== searchQuery) {
+        setSearchParams(inputValue ? { search: inputValue } : {}, { replace: true });
+      }
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
+  }, [inputValue, searchQuery, setSearchParams]);
+
+  // Handle form submission (for non-JS and Enter key)
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setSearchParams(inputValue ? { search: inputValue } : {});
+  };
+
   // Filter species based on search
   const filteredComparison = comparison.filter((item) => {
     const matchesSearch =
@@ -135,16 +161,26 @@ export default function SpeciesList({ loaderData }: Route.ComponentProps) {
         <h1 className="text-5xl md:text-6xl font-bold mb-6">Species Collection</h1>
 
         {/* Search */}
-        <div className="max-w-2xl">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchParams({ search: e.target.value })}
-            placeholder="Search by scientific name or authority..."
-            className="w-full px-4 py-3 text-xl border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:shadow-[0_0_0_2px_black] dark:focus:shadow-[0_0_0_2px_white]"
-            aria-label="Search species"
-          />
-        </div>
+        <Form method="get" onSubmit={handleSubmit} className="max-w-2xl">
+          <div className="flex gap-2">
+            <input
+              type="text"
+              name="search"
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              placeholder="Search by scientific name or authority..."
+              className="flex-1 px-4 py-3 text-xl border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:shadow-[0_0_0_2px_black] dark:focus:shadow-[0_0_0_2px_white]"
+              aria-label="Search species"
+            />
+            <button
+              type="submit"
+              className="px-6 py-3 text-xl font-bold border-2 border-black dark:border-white bg-black dark:bg-white text-white dark:text-black hover:bg-white hover:text-black dark:hover:bg-black dark:hover:text-white transition-colors"
+              aria-label="Submit search"
+            >
+              Search
+            </button>
+          </div>
+        </Form>
 
         <p className="mt-4 text-xl">
           Showing {filteredComparison.length} of {comparison.length} species
