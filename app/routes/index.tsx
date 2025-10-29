@@ -1,5 +1,4 @@
-import { useLoaderData, Link, useSearchParams, Form } from "react-router";
-import { useState, useEffect } from "react";
+import { Link, Form, useSearchParams } from "react-router";
 import type { Route } from "./+types/index";
 
 interface SpeciesListItem {
@@ -115,34 +114,8 @@ export async function loader({ context }: Route.LoaderArgs) {
 
 export default function SpeciesList({ loaderData }: Route.ComponentProps) {
   const { comparison } = loaderData as ComparisonData;
-  const [searchParams, setSearchParams] = useSearchParams();
-
+  const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
-
-  // Local state for immediate input updates (fast typing)
-  const [inputValue, setInputValue] = useState(searchQuery);
-
-  // Sync input with URL when search params change (e.g., browser back/forward)
-  useEffect(() => {
-    setInputValue(searchQuery);
-  }, [searchQuery]);
-
-  // Debounce URL updates - wait 300ms after user stops typing
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (inputValue !== searchQuery) {
-        setSearchParams(inputValue ? { search: inputValue } : {}, { replace: true });
-      }
-    }, 300);
-
-    return () => clearTimeout(timeoutId);
-  }, [inputValue, searchQuery, setSearchParams]);
-
-  // Handle form submission (for non-JS and Enter key)
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSearchParams(inputValue ? { search: inputValue } : {});
-  };
 
   // Filter species based on search
   const filteredComparison = comparison.filter((item) => {
@@ -161,13 +134,12 @@ export default function SpeciesList({ loaderData }: Route.ComponentProps) {
         <h1 className="text-5xl md:text-6xl font-bold mb-6">Species Collection</h1>
 
         {/* Search */}
-        <Form method="get" onSubmit={handleSubmit} className="max-w-2xl">
+        <Form method="get" className="max-w-2xl">
           <div className="flex gap-2">
             <input
               type="text"
               name="search"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
+              defaultValue={searchQuery}
               placeholder="Search by scientific name or authority..."
               className="flex-1 px-4 py-3 text-xl border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white focus:outline-none focus:shadow-[0_0_0_2px_black] dark:focus:shadow-[0_0_0_2px_white]"
               aria-label="Search species"
@@ -179,6 +151,15 @@ export default function SpeciesList({ loaderData }: Route.ComponentProps) {
             >
               Search
             </button>
+            {searchQuery && (
+              <Link
+                to="/"
+                className="px-6 py-3 text-xl font-bold border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-900 transition-colors"
+                aria-label="Clear search"
+              >
+                Clear
+              </Link>
+            )}
           </div>
         </Form>
 
