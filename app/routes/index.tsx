@@ -55,14 +55,17 @@ export async function loader({ context }: Route.LoaderArgs) {
   }
 
   // Create comparison map
-  const comparisonMap = new Map<string, {
-    scientific_name: string;
-    id: number | null;
-    inDb: boolean;
-    inSpider: boolean;
-    dbData?: SpeciesListItem;
-    spiderData?: SpiderSpecies;
-  }>();
+  const comparisonMap = new Map<
+    string,
+    {
+      scientific_name: string;
+      id: number | null;
+      inDb: boolean;
+      inSpider: boolean;
+      dbData?: SpeciesListItem;
+      spiderData?: SpiderSpecies;
+    }
+  >();
 
   // Add DB species
   for (const species of dbSpecies) {
@@ -116,6 +119,7 @@ export default function SpeciesList({ loaderData }: Route.ComponentProps) {
   const { comparison } = loaderData as ComparisonData;
   const [searchParams] = useSearchParams();
   const searchQuery = searchParams.get("search") || "";
+  const page = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
 
   // Filter species based on search
   const filteredComparison = comparison.filter((item) => {
@@ -126,6 +130,22 @@ export default function SpeciesList({ loaderData }: Route.ComponentProps) {
 
     return matchesSearch;
   });
+
+  // Pagination
+  const ITEMS_PER_PAGE = 18;
+  const totalPages = Math.ceil(filteredComparison.length / ITEMS_PER_PAGE);
+  const validPage = Math.min(page, Math.max(1, totalPages));
+  const startIndex = (validPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedResults = filteredComparison.slice(startIndex, endIndex);
+
+  // Helper to build page URLs
+  const buildPageUrl = (newPage: number) => {
+    const params = new URLSearchParams();
+    if (searchQuery) params.set("search", searchQuery);
+    if (newPage > 1) params.set("page", String(newPage));
+    return `/?${params.toString()}`;
+  };
 
   return (
     <div className="max-w-screen-xl mx-auto p-4 md:p-8">
@@ -164,7 +184,15 @@ export default function SpeciesList({ loaderData }: Route.ComponentProps) {
         </Form>
 
         <p className="mt-4 text-xl">
-          Showing {filteredComparison.length} of {comparison.length} species
+          {filteredComparison.length > 0 ? (
+            <>
+              Showing {startIndex + 1}-{Math.min(endIndex, filteredComparison.length)} of {filteredComparison.length}{" "}
+              species
+              {searchQuery && ` (filtered from ${comparison.length} total)`}
+            </>
+          ) : (
+            `0 of ${comparison.length} species`
+          )}
         </p>
       </header>
 
@@ -175,46 +203,57 @@ export default function SpeciesList({ loaderData }: Route.ComponentProps) {
           <p className="text-xl">Try a different search term</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredComparison.map((item) => {
-            const imageUrl = item.dbData?.main_image_url || item.spiderData?.thumbnail_url;
-            const commonName = item.dbData?.common_name || null;
-            const authority = item.spiderData?.authority || "";
-            const family = item.dbData?.family || "";
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {paginatedResults.map((item) => {
+              const imageUrl = item.dbData?.main_image_url || item.spiderData?.thumbnail_url;
+              const commonName = item.dbData?.common_name || null;
+              const authority = item.spiderData?.authority || "";
+              const family = item.dbData?.family || "";
 
-            return (
-              <div
-                key={item.scientific_name}
-                className={`relative border-2 border-black dark:border-white bg-white dark:bg-black ${
-                  !item.inDb ? "opacity-60" : ""
-                }`}
-              >
-                {/* Status Indicators */}
-                <div className="absolute top-2 right-2 z-10 flex gap-2">
-                  {item.inDb && (
-                    <div
-                      className="px-2 py-1 text-xs font-bold bg-black text-white dark:bg-white dark:text-black"
-                      title="In Database"
-                    >
-                      DB
-                    </div>
-                  )}
-                  {item.inSpider && (
-                    <div
-                      className="px-2 py-1 text-xs font-bold border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white"
-                      title="In Spider JSON"
-                    >
-                      JSON
-                    </div>
-                  )}
-                </div>
+              return (
+                <div
+                  key={item.scientific_name}
+                  className={`relative border-2 border-black dark:border-white bg-white dark:bg-black ${
+                    !item.inDb ? "opacity-60" : ""
+                  }`}
+                >
+                  {/* Status Indicators */}
+                  <div className="absolute top-2 right-2 z-10 flex gap-2">
+                    {item.inDb && (
+                      <div
+                        className="px-2 py-1 text-xs font-bold bg-black text-white dark:bg-white dark:text-black"
+                        title="In Database"
+                      >
+                        DB
+                      </div>
+                    )}
+                    {item.inSpider && (
+                      <div
+                        className="px-2 py-1 text-xs font-bold border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white"
+                        title="In Spider JSON"
+                      >
+                        JSON
+                      </div>
+                    )}
+                  </div>
 
-                {/* Link wrapper for DB species, plain div for others */}
-                {item.inDb && item.id ? (
-                  <Link
-                    to={`/species/${item.id}`}
-                    className="block hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
-                  >
+                  {/* Link wrapper for DB species, plain div for others */}
+                  {item.inDb && item.id ? (
+                    <Link
+                      to={`/species/${item.id}`}
+                      className="block hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors"
+                    >
+                      <SpeciesCard
+                        imageUrl={imageUrl}
+                        scientificName={item.scientific_name}
+                        commonName={commonName}
+                        authority={authority}
+                        family={family}
+                        speciesId={item.id}
+                      />
+                    </Link>
+                  ) : (
                     <SpeciesCard
                       imageUrl={imageUrl}
                       scientificName={item.scientific_name}
@@ -223,21 +262,105 @@ export default function SpeciesList({ loaderData }: Route.ComponentProps) {
                       family={family}
                       speciesId={item.id}
                     />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-12 flex flex-col items-center gap-6">
+              <div className="flex gap-2 flex-wrap justify-center">
+                {/* Previous button */}
+                {validPage > 1 ? (
+                  <Link
+                    to={buildPageUrl(validPage - 1)}
+                    className="px-6 py-3 text-xl font-bold border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
+                    aria-label="Previous page"
+                  >
+                    ← Previous
                   </Link>
                 ) : (
-                  <SpeciesCard
-                    imageUrl={imageUrl}
-                    scientificName={item.scientific_name}
-                    commonName={commonName}
-                    authority={authority}
-                    family={family}
-                    speciesId={item.id}
-                  />
+                  <span className="px-6 py-3 text-xl font-bold border-2 border-gray-400 dark:border-gray-600 bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed">
+                    ← Previous
+                  </span>
+                )}
+
+                {/* Page numbers */}
+                <div className="flex gap-2">
+                  {/* First page */}
+                  {validPage > 3 && (
+                    <>
+                      <Link
+                        to={buildPageUrl(1)}
+                        className="px-4 py-3 text-xl font-bold border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
+                      >
+                        1
+                      </Link>
+                      {validPage > 4 && <span className="px-4 py-3 text-xl font-bold">...</span>}
+                    </>
+                  )}
+
+                  {/* Pages around current */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter((p) => Math.abs(p - validPage) <= 1)
+                    .map((p) =>
+                      p === validPage ? (
+                        <span
+                          key={p}
+                          className="px-4 py-3 text-xl font-bold border-2 border-black dark:border-white bg-black dark:bg-white text-white dark:text-black"
+                          aria-current="page"
+                        >
+                          {p}
+                        </span>
+                      ) : (
+                        <Link
+                          key={p}
+                          to={buildPageUrl(p)}
+                          className="px-4 py-3 text-xl font-bold border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
+                        >
+                          {p}
+                        </Link>
+                      )
+                    )}
+
+                  {/* Last page */}
+                  {validPage < totalPages - 2 && (
+                    <>
+                      {validPage < totalPages - 3 && <span className="px-4 py-3 text-xl font-bold">...</span>}
+                      <Link
+                        to={buildPageUrl(totalPages)}
+                        className="px-4 py-3 text-xl font-bold border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
+                      >
+                        {totalPages}
+                      </Link>
+                    </>
+                  )}
+                </div>
+
+                {/* Next button */}
+                {validPage < totalPages ? (
+                  <Link
+                    to={buildPageUrl(validPage + 1)}
+                    className="px-6 py-3 text-xl font-bold border-2 border-black dark:border-white bg-white dark:bg-black text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition-colors"
+                    aria-label="Next page"
+                  >
+                    Next →
+                  </Link>
+                ) : (
+                  <span className="px-6 py-3 text-xl font-bold border-2 border-gray-400 dark:border-gray-600 bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-600 cursor-not-allowed">
+                    Next →
+                  </span>
                 )}
               </div>
-            );
-          })}
-        </div>
+
+              <p className="text-lg text-gray-600 dark:text-gray-400">
+                Page {validPage} of {totalPages}
+              </p>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
