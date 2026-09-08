@@ -136,13 +136,13 @@ export default function FimbristylisInsignis() {
           <figure className="mb-16">
             <img
               src="/species-media/fimbristylis-insignis/hero-spiral-rosette.jpg"
-              alt="A lime-green rosette of Fimbristylis insignis on wet black rock, its leaves curving one way around the centre in a flat spiral."
+              alt="A lime-green rosette of Fimbristylis insignis in a shallow layer of dark soil over rock, its leaves curving one way around the centre in a flat spiral."
               className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900"
             />
             <figcaption className="mt-3 text-base leading-snug text-gray-700 dark:text-gray-300">
-              The plant as you meet it: a flat green pinwheel on wet black rock. Every blade curves
-              the same way around the centre. There is no flowering stalk for most of the year, so
-              this rosette is the whole plant above ground.
+              The plant as you meet it: a flat green pinwheel in a shallow skin of soil over rock.
+              Every blade curves the same way around the centre. There is no flowering stalk for
+              most of the year, so this rosette is the whole plant above ground.
             </figcaption>
           </figure>
 
@@ -616,12 +616,13 @@ export default function FimbristylisInsignis() {
                   Wet season
                 </p>
                 <p className="font-semibold text-xl text-gray-900 dark:text-gray-100 mb-1">
-                  A lime-green pinwheel on wet stone
+                  A lime-green pinwheel
                 </p>
                 <p className="text-base text-gray-600 dark:text-gray-400">
                   With water available the rosette is bright and full. The blades spread wide and
                   curve one way around the centre, so the plant reads as a flat geometric spiral
-                  against dark, wet rock. Every field photograph here was taken in this phase.
+                  against the dark ground it sits on, whether that is a shallow skin of soil over
+                  rock or bare wet stone. Every field photograph here was taken in this phase.
                 </p>
               </div>
               <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-5">
