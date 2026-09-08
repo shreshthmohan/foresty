@@ -43,7 +43,7 @@ const NAV = [
   { id: "telling-it-apart", label: "Telling It Apart" },
   { id: "where-it-grows", label: "Where It Grows" },
   { id: "habitat", label: "Habitat & Neighbours" },
-  { id: "season", label: "Season" },
+  { id: "season", label: "Through the Year" },
   { id: "type-material", label: "Type Material" },
   { id: "conservation", label: "Conservation" },
   { id: "field-photographs", label: "Field Photographs" },
@@ -364,6 +364,22 @@ export default function FimbristylisInsignis() {
                 and anthers. Treat any Western Ghats record of <em>F. insignis</em> with care.
               </p>
             </div>
+            <div className="border-l-4 border-amber-600 dark:border-amber-500 bg-gray-50 dark:bg-gray-900 rounded-r-lg p-5 mt-6">
+              <p className="text-base leading-relaxed">
+                <strong className="font-semibold text-gray-900 dark:text-gray-100">
+                  Not the same plant: <em>Fimbristylis fimbristyloides</em>.
+                </strong>{" "}
+                <em>F. fimbristyloides</em> (F.Muell.) Druce is an accepted species in its own
+                right, not a synonym. Popular write-ups sometimes run the two names together under
+                a shared &ldquo;spiral sedge&rdquo; label, because both make a flat pinwheel
+                rosette. The ranges separate them. <em>F. fimbristyloides</em> reaches Nepal,
+                Bhutan, Assam, the East Himalaya, Korea and Japan, and is not recorded from Sri
+                Lanka. <em>F. insignis</em> is a Sri Lankan, Southeast Asian and Australian plant
+                and reaches none of those northern regions. Where they do overlap, in Thailand,
+                Borneo, Sulawesi, New Guinea and Queensland, use the description above rather than
+                the rosette shape.
+              </p>
+            </div>
           </Section>
 
           {/* Where it grows */}
@@ -525,6 +541,14 @@ export default function FimbristylisInsignis() {
               built to burn and come back, and the open ground after a fire is where a small sedge
               gets its light.
             </p>
+            <p className="leading-relaxed mb-6">
+              Kern&rsquo;s &ldquo;rocky grass-fields&rdquo; and the photographs point the same way:
+              much of the time this plant behaves as a lithophyte. It anchors a wiry root system in
+              a crack or in a film of soil over bare stone, on ground that holds a sheet of water in
+              the rains and bakes hard out of them. Look at thin soil over sandstone, mossy rock in
+              a stream bed, gravel at a stream margin, and the bare edges of seepage. That is where
+              the field pictures below were taken.
+            </p>
             <div className="border border-gray-300 dark:border-gray-700 rounded-lg p-5">
               <p className="text-base text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">
                 Altitude
@@ -538,7 +562,7 @@ export default function FimbristylisInsignis() {
           </Section>
 
           {/* Season */}
-          <Section id="season" title="Season">
+          <Section id="season" title="Through the Year">
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
               {[
                 { k: "China", v: "June", s: "Flowers and fruits, per Flora of China" },
@@ -557,10 +581,84 @@ export default function FimbristylisInsignis() {
                 </div>
               ))}
             </div>
-            <p className="leading-relaxed">
+            <p className="leading-relaxed mb-12">
               The species follows the monsoon. It flowers after the rains fill its ground, so the
               month moves with latitude. Herbarium labels carry dates from March to November, which
-              means no single flowering window covers the whole range.
+              means no single flowering window covers the whole range. For India the window is
+              usually given as August to November, as the rains recede.
+            </p>
+
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-3">
+              The plant changes shape twice
+            </h3>
+            <p className="leading-relaxed mb-6">
+              For most of the year there is no flowering stalk at all, and the plant is only a
+              rosette pressed against rock. The photographs on this page are almost all of that
+              phase. It is worth learning, because it is what you will actually meet.
+            </p>
+            <div className="space-y-4 mb-8">
+              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-5">
+                <p className="text-base text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">
+                  Wet season
+                </p>
+                <p className="font-semibold text-xl text-gray-900 dark:text-gray-100 mb-1">
+                  A lime-green pinwheel on wet stone
+                </p>
+                <p className="text-base text-gray-600 dark:text-gray-400">
+                  With water available the rosette is bright and full. The blades spread wide and
+                  curve one way around the centre, so the plant reads as a flat geometric spiral
+                  against dark, wet rock. Every field photograph here was taken in this phase.
+                </p>
+              </div>
+              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-5">
+                <p className="text-base text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">
+                  Dry season
+                </p>
+                <p className="font-semibold text-xl text-gray-900 dark:text-gray-100 mb-1">
+                  Straw, bronze and rust, rolled tight
+                </p>
+                <p className="text-base text-gray-600 dark:text-gray-400">
+                  As the ground bakes, the green goes. The blades roll inward and press flat to the
+                  rock, which cuts the surface the sun can reach. The leathery leaf and the short
+                  rhizome that the floras describe are both parts of the same answer to this
+                  problem. The plant is a perennial: it holds on and waits, rather than dying back
+                  to seed.
+                </p>
+              </div>
+              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-5">
+                <p className="text-base text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">
+                  Flowering
+                </p>
+                <p className="font-semibold text-xl text-gray-900 dark:text-gray-100 mb-1">
+                  Stiff stalks straight out of the middle
+                </p>
+                <p className="text-base text-gray-600 dark:text-gray-400">
+                  The geometry inverts. A few rigid, grooved culms rise vertically from the centre
+                  of the flat rosette and carry the head clear of it. There are no petals. Each
+                  spikelet is a hard brown cone of tightly overlapping glumes, and the only bright
+                  part is the three white stigmas at the tip. Wind does the pollinating. The
+                  Queensland photographs by Jason Searle are the ones on this page that show it.
+                </p>
+              </div>
+              <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-5">
+                <p className="text-base text-gray-400 dark:text-gray-500 uppercase tracking-wide mb-1">
+                  Fruit
+                </p>
+                <p className="font-semibold text-xl text-gray-900 dark:text-gray-100 mb-1">
+                  Nutlets into the cracks
+                </p>
+                <p className="text-base text-gray-600 dark:text-gray-400">
+                  The nutlets are about 1-1.5 mm, three-sided, warty and netted. They drop into the
+                  crevices around the parent and wait for the next rains. The two floras disagree on
+                  colour: the Flora of China says greyish black when ripe, Kern says whitish or
+                  brownish. Expect both, and use the shape and the net pattern instead.
+                </p>
+              </div>
+            </div>
+            <p className="text-base text-gray-500 dark:text-gray-400">
+              The two-phase account above is read off the photographs and the floras together. No
+              single source on this page describes the seasonal colour change directly, so treat it
+              as a working picture rather than a citation.
             </p>
           </Section>
 
