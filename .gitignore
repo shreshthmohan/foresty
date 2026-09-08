@@ -69,3 +69,6 @@ Thumbs.db
 
 # Planning file (used for generating this .gitignore)
 .gitignore-plan.md
+
+# Downloaded species media (large, re-fetchable from source)
+public/species-media/
