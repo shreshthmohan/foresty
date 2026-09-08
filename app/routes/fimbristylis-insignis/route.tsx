@@ -132,6 +132,20 @@ export default function FimbristylisInsignis() {
             </div>
           </header>
 
+          {/* Hero */}
+          <figure className="mb-16">
+            <img
+              src="/species-media/fimbristylis-insignis/hero-spiral-rosette.jpg"
+              alt="A lime-green rosette of Fimbristylis insignis on wet black rock, its leaves curving one way around the centre in a flat spiral."
+              className="w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900"
+            />
+            <figcaption className="mt-3 text-base leading-snug text-gray-700 dark:text-gray-300">
+              The plant as you meet it: a flat green pinwheel on wet black rock. Every blade curves
+              the same way around the centre. There is no flowering stalk for most of the year, so
+              this rosette is the whole plant above ground.
+            </figcaption>
+          </figure>
+
           {/* Overview */}
           <Section id="overview" title="Overview">
             <p className="leading-relaxed mb-6">
